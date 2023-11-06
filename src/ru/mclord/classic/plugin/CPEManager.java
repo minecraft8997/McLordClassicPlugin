@@ -1,8 +1,8 @@
 package ru.mclord.classic.plugin;
 
-import ru.mclord.classic.CPE;
 import ru.mclord.classic.Manager;
 import ru.mclord.classic.McLordClassic;
+import ru.mclord.classic.ShouldBeCalledBy;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,20 +19,24 @@ public class CPEManager implements Manager {
         return INSTANCE;
     }
 
+    @ShouldBeCalledBy(thread = "main")
     public boolean isExtensionSupported(String name, int version) {
         // since equals() and hashCode() methods are
         // marked final, we can freely use this approach
         return supportedExtensions.contains(new CPE(name, version));
     }
 
+    @ShouldBeCalledBy(thread = "main")
     public Set<CPE> getSupportedExtensions() {
         return new HashSet<>(supportedExtensions);
     }
 
+    @ShouldBeCalledBy(thread = "main")
     /* package-private */ Set<CPE> getSupportedExtensionsFast() {
         return supportedExtensions;
     }
 
+    @ShouldBeCalledBy(thread = "main")
     /* package-private */ void activateExtension(String name, int version) {
         for (CPE extension : supportedExtensions) {
             if (extension.name.equals(name) && extension.version == version) {
@@ -43,6 +47,7 @@ public class CPEManager implements Manager {
         }
     }
 
+    @ShouldBeCalledBy(thread = "main")
     public void registerExtension(CPE extension) {
         if (!checkStage()) {
             throw new IllegalStateException(
@@ -58,6 +63,6 @@ public class CPEManager implements Manager {
 
     @Override
     public boolean checkStage() {
-        return McLordClassic.game().stage == McLordClassic.GameStage.PRE_INITIALIZATION;
+        return McLordClassic.game().getStage() == McLordClassic.GameStage.PRE_INITIALIZATION;
     }
 }

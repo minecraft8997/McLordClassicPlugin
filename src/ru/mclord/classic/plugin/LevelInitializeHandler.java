@@ -1,8 +1,6 @@
 package ru.mclord.classic.plugin;
 
-import ru.mclord.classic.Level;
 import ru.mclord.classic.LevelDownloadDriver;
-import ru.mclord.classic.McLordClassic;
 import ru.mclord.classic.PacketHandler;
 
 import java.io.DataInputStream;
@@ -18,17 +16,6 @@ public class LevelInitializeHandler extends PacketHandler {
 
     @Override
     public void handle(DataInputStream stream) throws IOException {
-        LevelDownloadDriver driver = LevelDownloadDriver.driver;
-        if (driver == null) {
-            throw new IllegalStateException("LevelDownloadDriver was not set");
-        }
-
-        McLordClassic game = McLordClassic.game();
-        game.addTask(() -> game.stage = McLordClassic.GameStage.DOWNLOADING_THE_LEVEL);
-        System.out.println("Invoking LevelDownloadDriver (" + driver.getClass() + ")");
-        Level level = driver.downloadLevel(stream);
-
-        System.out.printf("Successfully downloaded a %dx%dx%d level%s",
-                level.sizeX, level.sizeY, level.sizeZ, System.lineSeparator());
+        LevelDownloadDriver.startDownloading(stream);
     }
 }

@@ -27,7 +27,7 @@ public class ExtInfoHandler extends PacketHandler {
         String appName = Helper.readProtocolString(stream);
         extensionCount = stream.readUnsignedShort();
         extensionsLeft = extensionCount;
-        McLordClassic.game().stage = McLordClassic.GameStage.ENABLING_PROTOCOL_EXTENSIONS;
+        McLordClassic.game().setStage(McLordClassic.GameStage.ENABLING_PROTOCOL_EXTENSIONS);
 
         System.out.println("Server AppName: " + appName);
         System.out.println("Extension count: " + extensionsLeft);

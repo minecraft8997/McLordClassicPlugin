@@ -9,15 +9,19 @@ public class ServerIdentificationHandler extends PacketHandler {
     public static final byte PACKET_ID = 0x00;
     public static final int PACKET_LENGTH = 130;
 
-    public ServerIdentificationHandler() {
+    private final PluginManager.Key key;
+
+    public ServerIdentificationHandler(PluginManager.Key key) {
         super(PACKET_ID, PACKET_LENGTH, false);
+
+        this.key = key;
     }
 
     @Override
     public void handle(DataInputStream stream) throws IOException {
         byte protocolVersion = stream.readByte();
         System.out.println("Server protocol version: " + protocolVersion);
-        if (protocolVersion != McLordClassic.PROTOCOL_VERSION) {
+        if (protocolVersion != ClassicPlugin.PROTOCOL_VERSION) {
             NetworkingThread.reportDisconnected("Unsupported protocol version");
 
             return;
@@ -31,6 +35,6 @@ public class ServerIdentificationHandler extends PacketHandler {
         System.out.println("Server MOTD: " + serverMOTD);
         System.out.println("User type: " + Integer.toHexString(userType) + " (HEX)");
 
-        PluginManager.getInstance().initPlugins();
+        PluginManager.getInstance().initPlugins(key);
     }
 }
