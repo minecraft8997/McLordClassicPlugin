@@ -14,5 +14,6 @@ public class PingPacketHandler extends PacketHandler {
 
     @Override
     public void handle(DataInputStream stream) {
+        // do nothing :D
     }
 }

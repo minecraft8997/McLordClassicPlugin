@@ -1,8 +1,6 @@
 package ru.mclord.classic.plugin;
 
-import ru.mclord.classic.PacketManager;
-import ru.mclord.classic.Plugin;
-import ru.mclord.classic.PluginManager;
+import ru.mclord.classic.*;
 
 public class ClassicPlugin implements Plugin {
     public static final byte PROTOCOL_VERSION = 7;
@@ -11,7 +9,6 @@ public class ClassicPlugin implements Plugin {
 
     @Override
     public void preInit() {
-        System.out.println("Setting up networking...");
         PacketManager.getInstance().registerWriter(new PlayerIdentificationWriter());
 
         PacketManager.getInstance().registerHandler(new ExtInfoHandler());
@@ -20,6 +17,11 @@ public class ClassicPlugin implements Plugin {
         PacketManager.getInstance().registerHandler(new ServerIdentificationHandler(key));
         PacketManager.getInstance().registerHandler(new LevelInitializeHandler());
         PacketManager.getInstance().registerHandler(new MessageHandler());
+
+        LevelDownloadDriver.setDriver(new ClassicLevelDownloadDriver(key));
+
+        TextureManager.getInstance().load("https://static.classicube.net/" +
+                "default.zip", true, false);
     }
 
     @Override
