@@ -11,6 +11,8 @@ public class ClassicPlugin implements Plugin {
 
     @Override
     public void preInit() {
+        Blocks.registerAll();
+
         PacketManager.getInstance().registerWriter(new PlayerIdentificationWriter());
 
         PacketManager.getInstance().registerHandler(new ExtInfoHandler());
@@ -19,8 +21,9 @@ public class ClassicPlugin implements Plugin {
         PacketManager.getInstance().registerHandler(new ServerIdentificationHandler(key));
         PacketManager.getInstance().registerHandler(new LevelInitializeHandler());
         PacketManager.getInstance().registerHandler(new MessageHandler());
+        PacketManager.getInstance().registerHandler(new SpawnPlayerHandler());
 
-        if (!(new File("do_not_setup_level_download_driver.txt")).exists()) {
+        if (!(new File("mcp_do_not_setup_level_download_driver.txt")).exists()) {
             LevelDownloadDriver.setDriver(new ClassicLevelDownloadDriver(key));
         }
     }

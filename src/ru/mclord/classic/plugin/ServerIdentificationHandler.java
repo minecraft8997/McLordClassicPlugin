@@ -9,7 +9,10 @@ public class ServerIdentificationHandler extends PacketHandler {
     public static final byte PACKET_ID = 0x00;
     public static final int PACKET_LENGTH = 130;
 
+    /* package-private */ static byte lastUserType;
+
     private final PluginManager.Key key;
+    private boolean alreadyInitialized;
 
     public ServerIdentificationHandler(PluginManager.Key key) {
         super(PACKET_ID, PACKET_LENGTH, false);
@@ -29,12 +32,24 @@ public class ServerIdentificationHandler extends PacketHandler {
 
         String serverName = Helper.readProtocolString(stream);
         String serverMOTD = Helper.readProtocolString(stream);
-        byte userType = stream.readByte();
+        lastUserType = stream.readByte();
 
         System.out.println("Server name: " + serverName);
         System.out.println("Server MOTD: " + serverMOTD);
-        System.out.println("User type: " + Integer.toHexString(userType) + " (HEX)");
+        System.out.println("User type: " + Integer.toHexString(lastUserType) + " (HEX)");
 
-        PluginManager.getInstance().initPlugins(key);
+        if (!alreadyInitialized) {
+            if (!serverMOTD.toLowerCase().contains("+mclc0")) {
+                NetworkingThread.reportDisconnected("The server did not declare " +
+                        "support of early McLord Classic versions (including the current " +
+                        "one). Boycott this server");
+
+                return;
+            }
+
+            PluginManager.getInstance().initPlugins(key);
+
+            alreadyInitialized = true;
+        }
     }
 }
