@@ -2,6 +2,8 @@ package ru.mclord.classic.plugin;
 
 import ru.mclord.classic.*;
 
+import java.io.File;
+
 public class ClassicPlugin implements Plugin {
     public static final byte PROTOCOL_VERSION = 7;
 
@@ -18,10 +20,9 @@ public class ClassicPlugin implements Plugin {
         PacketManager.getInstance().registerHandler(new LevelInitializeHandler());
         PacketManager.getInstance().registerHandler(new MessageHandler());
 
-        LevelDownloadDriver.setDriver(new ClassicLevelDownloadDriver(key));
-
-        TextureManager.getInstance().load("https://static.classicube.net/" +
-                "default.zip", true, false);
+        if (!(new File("do_not_setup_level_download_driver.txt")).exists()) {
+            LevelDownloadDriver.setDriver(new ClassicLevelDownloadDriver(key));
+        }
     }
 
     @Override

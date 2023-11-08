@@ -23,6 +23,7 @@ public class ClassicLevelDownloadDriver extends LevelDownloadDriver {
         byte packetId;
         ByteArrayOutputStream outputStream0 = new ByteArrayOutputStream();
         byte[] compressedData = new byte[1024];
+        byte lastPercentComplete = 0;
         while (true) {
             packetId = inputStream.readByte();
             if (packetId == LEVEL_FINALIZE_PACKET_ID) break;
@@ -39,16 +40,39 @@ public class ClassicLevelDownloadDriver extends LevelDownloadDriver {
             }
             short chunkLength = inputStream.readShort();
             inputStream.readFully(compressedData);
-
             outputStream0.write(compressedData, 0, chunkLength);
+
+            byte percentComplete = inputStream.readByte();
+            if (percentComplete != lastPercentComplete) {
+                System.out.println("Percent complete: " + percentComplete);
+
+                lastPercentComplete = percentComplete;
+            }
         }
+        int sizeX = inputStream.readShort();
+        int sizeY = inputStream.readShort();
+        int sizeZ = inputStream.readShort();
+
         ByteArrayInputStream inputStream0 =
                 new ByteArrayInputStream(outputStream0.toByteArray());
         GZIPInputStream decompressedStream = new GZIPInputStream(inputStream0);
         DataInputStream stream = new DataInputStream(decompressedStream);
 
+        int blockArrayLen = stream.readInt();
+        if (blockArrayLen != sizeX * sizeY * sizeZ) {
+            throw new RuntimeException(String.format("Invalid dimensions: len=%d, " +
+                    "sizeX=%d, sizeY=%d, sizeZ=%d", blockArrayLen, sizeX, sizeY, sizeZ));
+        }
+        Level level = new Level(sizeX, sizeY, sizeZ);
+        for (int y = 0; y < sizeY; y++) {
+            for (int z = 0; z < sizeZ; z++) {
+                for (int x = 0; x < sizeX; x++) {
+                    level.setBlockAt(x, y, z, (short) Byte.toUnsignedInt(stream.readByte()));
+                }
+            }
+        }
+        // we don't have to close any of these streams
 
-
-        return null;
+        return level;
     }
 }
