@@ -45,6 +45,7 @@ public class ClassicLevelDownloadDriver extends LevelDownloadDriver {
             byte percentComplete = inputStream.readByte();
             if (percentComplete != lastPercentComplete) {
                 System.out.println("Percent complete: " + percentComplete);
+                LoadingScreen.getInstance().setProgress(percentComplete);
 
                 lastPercentComplete = percentComplete;
             }
