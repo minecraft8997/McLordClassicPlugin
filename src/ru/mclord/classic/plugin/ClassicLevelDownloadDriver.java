@@ -65,13 +65,20 @@ public class ClassicLevelDownloadDriver extends LevelDownloadDriver {
                     "sizeX=%d, sizeY=%d, sizeZ=%d", blockArrayLen, sizeX, sizeY, sizeZ));
         }
         Level level = new Level(sizeX, sizeY, sizeZ);
-        for (int y = 0; y < sizeY; y++) {
-            for (int z = 0; z < sizeZ; z++) {
-                for (int x = 0; x < sizeX; x++) {
-                    level.setBlockAt(x, y, z, (short) Byte.toUnsignedInt(stream.readByte()));
+        McLordClassic.game().addTask(() -> {
+            for (int y = 0; y < sizeY; y++) {
+                for (int z = 0; z < sizeZ; z++) {
+                    for (int x = 0; x < sizeX; x++) {
+                        try {
+                            level.setBlockAt(x, y, z,
+                                    (short) Byte.toUnsignedInt(stream.readByte()));
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
                 }
             }
-        }
+        });
         // we don't have to close any of these streams
 
         return level;
