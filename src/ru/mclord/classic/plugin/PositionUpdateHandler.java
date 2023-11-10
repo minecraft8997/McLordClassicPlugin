@@ -6,10 +6,10 @@ import java.io.DataInputStream;
 
 public class PositionUpdateHandler extends PacketHandler {
     public static final byte PACKET_ID = 0x0A;
-    public static final int PACKET_LENGTH = 7;
+    public static final int PACKET_LENGTH = 4;
 
     public PositionUpdateHandler() {
-        super(PACKET_ID, PACKET_LENGTH, true);
+        super(PACKET_ID, PACKET_LENGTH);
     }
 
     @Override

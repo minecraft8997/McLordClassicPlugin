@@ -9,7 +9,7 @@ public class SetPositionAndOrientationHandler extends PacketHandler {
     public static final int PACKET_LENGTH = 9;
 
     public SetPositionAndOrientationHandler() {
-        super(PACKET_ID, PACKET_LENGTH, true);
+        super(PACKET_ID, PACKET_LENGTH);
     }
 
     @Override

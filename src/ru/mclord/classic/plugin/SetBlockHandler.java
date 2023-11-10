@@ -11,7 +11,7 @@ public class SetBlockHandler extends PacketHandler {
     public static final int PACKET_LENGTH = 7;
 
     public SetBlockHandler() {
-        super(PACKET_ID, PACKET_LENGTH, true);
+        super(PACKET_ID, PACKET_LENGTH);
     }
 
     @Override

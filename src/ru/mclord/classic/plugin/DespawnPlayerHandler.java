@@ -9,7 +9,7 @@ public class DespawnPlayerHandler extends PacketHandler {
     public static final int PACKET_LENGTH = 2;
 
     public DespawnPlayerHandler() {
-        super(PACKET_ID, PACKET_LENGTH, true);
+        super(PACKET_ID, PACKET_LENGTH);
     }
 
     @Override

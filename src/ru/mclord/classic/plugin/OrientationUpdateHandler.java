@@ -9,7 +9,7 @@ public class OrientationUpdateHandler extends PacketHandler {
     public static final int PACKET_LENGTH = 3;
 
     public OrientationUpdateHandler() {
-        super(PACKET_ID, PACKET_LENGTH, true);
+        super(PACKET_ID, PACKET_LENGTH);
     }
 
     @Override

@@ -11,7 +11,7 @@ public class UpdateUserTypeHandler extends PacketHandler {
     public static final int PACKET_LENGTH = 1;
 
     public UpdateUserTypeHandler() {
-        super(PACKET_ID, PACKET_LENGTH, true);
+        super(PACKET_ID, PACKET_LENGTH);
     }
 
     @Override
