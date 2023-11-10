@@ -12,6 +12,7 @@ public class ClassicPlugin implements Plugin {
     public static final byte PROTOCOL_VERSION = 7;
 
     private PluginManager.Key key;
+    private boolean customizeEnvironment;
 
     @Override
     public void preInit() {
@@ -29,15 +30,27 @@ public class ClassicPlugin implements Plugin {
         PacketManager.getInstance().registerHandler(new LevelInitializeHandler());
         PacketManager.getInstance().registerHandler(new MessageHandler());
         PacketManager.getInstance().registerHandler(new SpawnPlayerHandler());
+        PacketManager.getInstance().registerHandler(new DespawnPlayerHandler());
+        PacketManager.getInstance().registerHandler(new DisconnectPlayerHandler());
+        PacketManager.getInstance().registerHandler(new OrientationUpdateHandler());
+        PacketManager.getInstance().registerHandler(new PositionAndOrientationUpdateHandler());
+        PacketManager.getInstance().registerHandler(new PositionUpdateHandler());
+        PacketManager.getInstance().registerHandler(new SetBlockHandler());
+        PacketManager.getInstance().registerHandler(new SetPositionAndOrientationHandler());
+        PacketManager.getInstance().registerHandler(new UpdateUserTypeHandler());
 
         if (!(new File("mcp_do_not_setup_level_download_driver.txt")).exists()) {
             LevelDownloadDriver.setDriver(new ClassicLevelDownloadDriver(key));
         }
+        if (!(new File("mcp_do_not_customize_environment.txt")).exists()) {
+            customizeEnvironment = true;
+        }
     }
 
     private void handleCustomizeEnvironment(CustomizeEnvironmentEvent event) {
-        Environment environment = event.getEnvironment();
+        if (!customizeEnvironment) return;
 
+        Environment environment = event.getEnvironment();
         environment.set(new ColorAttribute(ColorAttribute.AmbientLight,
                 0.5f, 0.5f, 0.5f, 1.0f));
         environment.add(new DirectionalLight().set(
